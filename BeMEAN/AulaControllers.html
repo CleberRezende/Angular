@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aula Controllers</title>
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <script src="./js/angular/angular.min.js"></script>
+
+    <script>
+        angular.module('BeMEAN', [])
+            .controller('UserController', UserController)
+            .controller('CursoController', CursoController);
+
+        function UserController(){
+            this.titulo = 'ClebisMen - Usuários'
+            this.users = [
+                {name: 'Cleber', email: 'email@email.com'},
+                {name: 'Rezende', email: 'zikzera@lalala.com'},
+                {name: 'Spirlandeli', email: 'teste@testeemail.com'}
+            ];
+        } // function UserController
+
+        function CursoController(){
+            this.titulo = 'ClebisMen - Cursos'
+            this.cursos = [
+                {name: 'Prof 1', teacher: 'Teacher 1'},
+                {name: 'Prof 2', teacher: 'Teacher 2'},
+                {name: 'Prof 3', teacher: 'Teacher 3'}
+            ];
+        } // function CursoController
+
+
+    </script>
+
+</head>
+
+<body ng-app="BeMEAN">
+
+    <div ng-controller="UserController as Users">
+        <label for="">Buscar:
+            <input ng-model="searchUser" type="text">
+        </label>
+
+        <h1>Listas de Usuários</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th ng-repeat="(key, value) in Users.users[0]"> {{ key }} </th>
+                </tr>
+                <tbody>
+                    <tr ng-repeat="user in Users.users | orderBy:'name' | filter:searchUser">
+                        <td ng-repeat="info in user"> {{info}} </td>
+                    </tr>
+                </tbody>
+            </thead>
+        </table>
+    </div>
+
+
+    <div ng-controller="CursoController as Cursos">
+        <h1>Listas de Cursos</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th ng-repeat="(key, value) in Cursos.cursos[0]"> {{ key }} </th>
+                </tr>
+                <tbody>
+                    <tr ng-repeat=" curso in Cursos.cursos | orderBy:'name'">
+                        <td ng-repeat="info in curso"> {{info}} </td>
+                    </tr>
+                </tbody>
+            </thead>
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Curso AngularJS</title>
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <script src="./js/angular/angular.min.js"></script>
+
+    <script>
+        angular.module('BeMEAN', [])
+            .filter('reverseString', function(){
+                return function(text){
+                    if(text){
+                        return text.split("").reverse().join("");
+                    }
+                }
+            })
+
+            .filter('truncate', function(){
+                return function(text, length, end){
+                    if(text){
+                        if(isNaN(length)) {length = 10;}
+                        if(end === undefined) { end = "..."; }
+
+                        if(text.length <= length){
+                            return text;
+                        }
+                        else{
+                            return String(text).substring(0,length) + end;
+                        }
+                    }
+                }
+            });
+
+    </script>
+
+
+</head>
+
+<body ng-app="BeMEAN">
+
+<label for="nome">Seu Nome:
+    <input type="text" ng-model="nome">
+</label>
+
+Olá caro {{ nome | uppercase | truncate:5 }}
+
+
+</body>
+</html>
