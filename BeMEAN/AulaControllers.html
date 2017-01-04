@@ -1,79 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="BeMEAN">
 
 <head>
     <meta charset="UTF-8">
     <title>Aula Controllers</title>
     <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <script src="./js/angular/angular.min.js"></script>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/X.Y.Z/angular-animate.js"></script>-->
+
+    <style>
+        .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .margem {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+
+        .tempo{
+            transition: 0.5s;
+        }
+
+        .ng-hide{
+            height: 0;
+        }
+
+    </style>
 
     <script>
         angular.module('BeMEAN', [])
-            .controller('UserController', UserController)
-            .controller('CursoController', CursoController);
+            .controller('UserController', UserController);
 
         function UserController(){
-            this.titulo = 'ClebisMen - Usuários'
-            this.users = [
+            var vm = this;
+            var editing = false;
+            var add = true;
+            vm.titulo = 'Usuários'
+            vm.users = [
                 {name: 'Cleber', email: 'email@email.com'},
                 {name: 'Rezende', email: 'zikzera@lalala.com'},
                 {name: 'Spirlandeli', email: 'teste@testeemail.com'}
             ];
+
+            function getKeyLength(){
+                return Object.keys(angular.copy(vm.users[0])).length;
+            }
+
+            vm.keysLength = getKeyLength();
+
+            vm.add = add;
+            function add(user){
+                vm.users.push(angular.copy(user));
+            }
+
+            vm.remove = remove;
+            function remove(users){
+                vm.users = users.filter(function(el){
+                    return !el.selecionado;
+                });
+            }
+
+            vm.edit = edit;
+            function edit(user, index){
+                vm.form = angular.copy(user);
+                vm.form.index = index;
+                vm.add = false;
+                vm.editing = true;
+            }
+
+            vm.save = save;
+            function save(user){
+                var users = vm.users.map(function(el, i){
+                    if(i === user.index){
+                        delete user.index;
+                        return user;
+                    }
+                    return el;
+                });
+                vm.users = angular.copy(users);
+                vm.editing = false;
+                vm.add = true;
+            }
+
+
         } // function UserController
-
-        function CursoController(){
-            this.titulo = 'ClebisMen - Cursos'
-            this.cursos = [
-                {name: 'Prof 1', teacher: 'Teacher 1'},
-                {name: 'Prof 2', teacher: 'Teacher 2'},
-                {name: 'Prof 3', teacher: 'Teacher 3'}
-            ];
-        } // function CursoController
-
-
     </script>
 
 </head>
 
-<body ng-app="BeMEAN">
+<body ng-controller="UserController as User">
 
-    <div ng-controller="UserController as Users">
-        <label for="">Buscar:
-            <input ng-model="searchUser" type="text">
+    <section class="row wrapper">
+
+        <h1>{{ User.titulo }}</h1>
+
+        <p class="col s12">
+            <label class="col s12">Nome:
+                <input ng-model="User.form.name" type="text" placeholder="Digite seu nome">
+            </label>
+            <br>
+            <label class="col s12">Email:
+                <input ng-model="User.form.email" type="text" placeholder="Digite seu email">
+            </label>
+        </p>
+
+        <button ng-hide="!User.add" ng-click="User.add(User.form)" class="btn btn-large green waves-effect waves-light col tempo s12" type="submit" name="action">Cadastrar</button>
+
+        <button ng-hide="!User.editing" ng-click="User.save(User.form)" class="btn btn-large blue waves-effect waves-light col tempo s12" type="submit" name="action">Salvar</button>
+
+        <label class="col s12 margem">
+            <input ng-model="searchUser" type="text" placeholder="Procurar por...">
         </label>
 
-        <h1>Listas de Usuários</h1>
+        <hr>
+
         <table>
             <thead>
+                <!--<tr>
+                    <th colspan="3">
+                        <label>
+                            <input ng-model="searchUser" type="text" placeholder="Procurar por...">
+                        </label>
+                    </th>
+                </tr>-->
                 <tr>
-                    <th ng-repeat="(key, value) in Users.users[0]"> {{ key }} </th>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th></th>
                 </tr>
-                <tbody>
-                    <tr ng-repeat="user in Users.users | orderBy:'name' | filter:searchUser">
-                        <td ng-repeat="info in user"> {{info}} </td>
-                    </tr>
-                </tbody>
             </thead>
-        </table>
-    </div>
+            <tbody>
+                <tr ng-repeat="user in User.users | filter:searchUser">
+                    <td>
+                        <input type="checkbox" id="user-{{$index}}" ng-model="user.selecionado" />
+                        <label for="user-{{$index}}"></label>
+                    </td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
 
+                    <td>
+                        <button ng-click="User.edit(user, $index)" class="btn btn-large blue waves-effect waves-light col s12" type="submit" name="action">Editar</button>
+                    </td>
 
-    <div ng-controller="CursoController as Cursos">
-        <h1>Listas de Cursos</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th ng-repeat="(key, value) in Cursos.cursos[0]"> {{ key }} </th>
                 </tr>
-                <tbody>
-                    <tr ng-repeat=" curso in Cursos.cursos | orderBy:'name'">
-                        <td ng-repeat="info in curso"> {{info}} </td>
-                    </tr>
-                </tbody>
-            </thead>
+            </tbody>
         </table>
-    </div>
 
+        <button ng-click="User.remove(User.users)" class="btn btn-large red waves-effect waves-light col s12 margem" type="submit" name="action">REMOVER</button>
+
+
+    </section>
 </body>
 
 </html>
