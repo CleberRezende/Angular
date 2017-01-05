@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-bt">
+<header>
+    <meta charset="UTF-8">
+    <title>Validações de Formulários</title>
+
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <script src="./js/angular/angular.min.js"></script>
+
+
+<style>
+    .sucess{
+        background-color: #a4e567;
+    }
+    .danger{
+        background-color: #E56759;
+    }
+    .ng-invalid{
+        background-color: red;
+    }
+
+</style>
+
+
+
+
+</header>
+
+<body ng-controller="UserController as User">
+
+    <section class="row wrapper">
+
+        <div class="col s12">
+
+            <form name="userForm">
+
+                <div>
+                    <label> NAME </label>
+                    <input type="text" name="name" ng-model="user.name" required>
+                </div>
+
+                <div>
+                    <label> EMAIL </label>
+                    <input type="email" name="email" ng-model="user.email">
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+
+
+
+
+</body>
+
+</html>

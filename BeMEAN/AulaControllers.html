@@ -28,6 +28,10 @@
             height: 0;
         }
 
+        .colorir{
+            background-color: red;
+        }
+
     </style>
 
     <script>
@@ -38,11 +42,14 @@
             var vm = this;
             var editing = false;
             var add = true;
+            vm.style = "colorir";
             vm.titulo = 'Usuários'
             vm.users = [
-                {name: 'Cleber', email: 'email@email.com'},
-                {name: 'Rezende', email: 'zikzera@lalala.com'},
-                {name: 'Spirlandeli', email: 'teste@testeemail.com'}
+                {name: 'Cleber', email: 'email@email.com', type:'Professor', active:true},
+                {name: 'Rezende', email: 'zikzera@jjjjj.com', type:'Aluno', active:false},
+                {name: 'Dona Maria', email: 'teste1@aaaaa.com', type:'Aluno', active:false},
+                {name: 'Dona Joana', email: 'teste2@zzzz.com', type:'Aluno', active:true},
+                {name: 'Dona Lucia', email: 'teste3@yyyyy.com', type:'Professor', active:true}
             ];
 
             function getKeyLength(){
@@ -85,6 +92,10 @@
                 vm.add = true;
             }
 
+            vm.classe = classe;
+            function classe(user, index){
+                return vm.style;
+            }
 
         } // function UserController
     </script>
@@ -94,6 +105,12 @@
 <body ng-controller="UserController as User">
 
     <section class="row wrapper">
+
+
+        <select ng-options="user.email as user.name for user in User.users">
+            <option value="">Escolha um</option>
+        </select>
+
 
         <h1>{{ User.titulo }}</h1>
 
@@ -136,7 +153,7 @@
             <tbody>
                 <tr ng-repeat="user in User.users | filter:searchUser">
                     <td>
-                        <input type="checkbox" id="user-{{$index}}" ng-model="user.selecionado" />
+                        <input type="checkbox" id="user-{{$index}}" ng-model="user.selecionado" ng-click="User.classe(user,$index)"/>
                         <label for="user-{{$index}}"></label>
                     </td>
                     <td>{{ user.name }}</td>
@@ -151,6 +168,10 @@
         </table>
 
         <button ng-click="User.remove(User.users)" class="btn btn-large red waves-effect waves-light col s12 margem" type="submit" name="action">REMOVER</button>
+
+
+
+
 
 
     </section>
