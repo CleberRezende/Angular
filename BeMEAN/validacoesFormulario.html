@@ -35,7 +35,7 @@
 
             <form name="userForm">
 
-                <div>
+                <div ng-class="{'invalid' : userForm.name.$invalid}">
                     <label> NAME </label>
                     <input type="text" name="name" ng-model="user.name" required>
                 </div>
