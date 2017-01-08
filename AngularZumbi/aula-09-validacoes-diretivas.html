@@ -21,6 +21,27 @@
         });
 
 
+        angular.module('app').directive('ngZumbiSubmit', function(){
+                return{
+                    restrict: 'E',
+                    require: '^form',
+                    scope: {
+                        submit: '&'
+                    },
+                    template: '<button type="submit" class="btn btn-primary"> SALVAR </button>',
+                    link: function($scope, $element, $attrs, formCtrl){
+                        $element.on('click', function() {
+                            if(formCtrl.$valid){
+                                $scope.submit();
+                            }
+                            else{
+                                alert('Formulário inválido')
+                            }
+                        }); // $element.on('click')
+                    } // FIM Link
+                }// FIM RETURN
+            }); // FIM angular.module('app').directive('ngZumbiSubmit' ...
+
 
 
         angular.module('app').directive('ngBlur', function(){
@@ -95,7 +116,8 @@
                 <label>Ocorrências</label>
                 <input ng-blur type="text" ng-model="ocorrencia.numero" ng-minlength="1" ng-pattern="/^[0-9]{1,}$/" required class="form-control">
             </div>
-            <button ng-click="cadastrarZumbi(ocorrencia)" ng-disabled="formPrincipal.$invalid" type="submit" class="btn btn-primary"> SALVAR </button>
+
+            <ng-zumbi-submit submit="cadastrarZumbi(ocorrencia)"></ng-zumbi-submit>
 
         </form>
     </div>
