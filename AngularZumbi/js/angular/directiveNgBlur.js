@@ -13,5 +13,5 @@ angular.module('app').directive('ngBlur', function () {
                 }
             }); // FIM $element.on
         } // FIM Link
-    }// FIM RETURN
+    };// FIM RETURN
 }); // FIM angular.module('app').directive('ngBlur' ...
