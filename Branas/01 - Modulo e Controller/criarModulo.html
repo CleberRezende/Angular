@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <title>Criando Controller</title>
+        <script src="../angular/angular.min.js"> </script>
+        <script>
+            angular.module("meuModulo", []); // Cria o Modulo
+            angular.module("meuModulo").controller("meuModuloCtrl", function($scope){
+                $scope.mensagem = "Modulo Criado: meuModulo - Controller Criado: meuModuloCtrl";
+            });
+        </script>
+    </head>
+
+    <body ng-app="meuModulo">
+        <div ng-controller="meuModuloCtrl">
+            {{mensagem}}
+        </div>
+        
+    </body>
+</html>

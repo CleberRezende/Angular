@@ -1,0 +1,126 @@
+<!--    
+    Aula 03
+    Aprendendo a usar Directivas - outras diretivas ngDisabled
+-->
+
+<!DOCTYPE html>
+<html ng-app="listaTelefonica" lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <title>Criando Controller</title>
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="../css/style.css">
+        <script src="../angular/angular.min.js"> </script>
+        <script>
+            angular.module("listaTelefonica", []);
+            angular.module("listaTelefonica").controller("listaTelefonicaCtrl" , function($scope){
+                
+                $scope.app = "Lista Telefones";
+
+                // Lista de Contatos
+                $scope.contatos = [
+                    {nome:'Cleber', telefone:"99991111"},
+                    {nome:'Rezende', telefone:"99992222"},
+                    {nome:'Spirlandeli', telefone:"99993333"}
+                ];
+
+                // Lista de Operadoras
+                $scope.operadoras = [
+                    {nome: "Claro", codigo: 105, categoria: "Celular"},
+                    {nome: "Ctbc", codigo: 109, categoria: "Celular"},
+                    {nome: "Oi", codigo: 101, categoria: "Fixo"},
+                    {nome: "Vivo", codigo: 203, categoria: "Celular"},
+                    {nome: "NET", codigo: 206, categoria: "Fixo"},
+                ];
+
+                // Função para adicionar na lista de contatos
+                $scope.adicionarContato = function(contato){
+                    $scope.contatos.push(angular.copy(contato));
+                    delete $scope.contato;
+                    $scope.listaForm.$setPristine();
+                };
+
+                // Função para Apagar os Contatos da Lista de Contatos
+                $scope.deletarContato = function(contatos){
+                    $scope.contatos = contatos.filter( function (contato){ 
+                        if (!contato.selecionado) {
+                            return contato;
+                        }
+                    });
+                };
+
+                // Função que valida se o botão deletar é válido ou inválido
+                $scope.isContatoSelecionado = function(contatos){
+                    return !contatos.some(function(contato){ // some : return true or false
+                        return contato.selecionado;
+                    });
+                };
+
+
+                // $scope.classe1 = "selecionado";
+                // $scope.classe2 = "negrito";
+
+            });
+        </script>
+    </head>
+
+    <body ng-controller="listaTelefonicaCtrl">
+        
+        <div class="jumbotron">
+
+            <div ng-show="listaForm.campoNome.$invalid && listaForm.campoNome.$dirty" class="alert alert-danger">
+                Campo Nome
+            </div>
+            <div ng-show="listaForm.campoTelefone.$invalid && listaForm.campoTelefone.$dirty" class="alert alert-danger">
+                Campo Telefone
+            </div>
+            <div ng-show="listaForm.campoOperadora.$invalid && listaForm.campoOperadora.$dirty" class="alert alert-danger">
+                Campo Operadora
+            </div>
+
+            <form name="listaForm">
+                <h3>Adicionar Contato</h3>
+                <input type="text" ng-model="contato.nome" id="contatoNome" class="form-control" name="campoNome" placeholder="Nome..." required> <br>
+                <input type="text" ng-model="contato.telefone" id="contatoTelefone" class="form-control" name="campoTelefone" placeholder="0000-0000" required> <br>
+                
+                <select ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras" name="campoOperadora" class="form-control" required >
+                    <option value="">Selecione uma operadora</option>
+                </select> <br>
+                
+                <button ng-disabled="listaForm.$invalid" ng-click="adicionarContato(contato)"  class="btn btn-primary btn-block">Adicionar Contato</button>
+                <hr>
+            </form>
+            
+                <div ng-if="contatos.length > 0"> 
+                <h3>{{app}}</h3>
+                    <table class="table"> <!--  table-striped -->
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nome:</th>
+                                <th>Telefone:</th>
+                                <th>Operadora:</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-class="{'selecionado negrito' : contato.selecionado}" ng-repeat="contato in contatos">
+                                <td><input type="checkbox" ng-model="contato.selecionado"></td>
+                                <td>{{contato.nome}}</td>
+                                <td>{{contato.telefone}}</td>
+                                <td>{{contato.operadora.nome}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button ng-click="deletarContato(contatos)" ng-disabled="isContatoSelecionado(contatos)" class="btn btn-danger btn-block">Deletar Contato</button>
+                </div> <!-- FIM <div ng-if="contatos.length > 0"> -->
+
+        </div> <!-- Jumbotron -->
+<!--
+        <div ng-include="'footer.html'">
+            
+        </div>
+-->
+    </body>
+</html>
